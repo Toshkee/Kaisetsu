@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bytpam3jj2vt7"
-path="res://.godot/imported/dark_cave_bg.png-0362b70042c3c2197d2d96841bbe251a.ctex"
+uid="uid://b21j4kfsyupci"
+path="res://.godot/imported/map-composite.png-8cadc8dd0d56c8244e59337bc5428d15.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/maps/grass_test/dark_cave_bg.png"
-dest_files=["res://.godot/imported/dark_cave_bg.png-0362b70042c3c2197d2d96841bbe251a.ctex"]
+source_file="res://assets/maps/grass_main/map-composite.png"
+dest_files=["res://.godot/imported/map-composite.png-8cadc8dd0d56c8244e59337bc5428d15.ctex"]
 
 [params]
 

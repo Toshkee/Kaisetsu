@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/scenes/map.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/maps/grass_main/map-composite.png" id="2_composite"]
+[ext_resource type="Texture2D" path="res://assets/maps/grass_main/bg_forest.png" id="3_bg"]
+[ext_resource type="PackedScene" path="res://src/player/Player.tscn" id="4_player"]
+
+[node name="Map" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_filter = 1
+z_index = -100
+centered = false
+position = Vector2(0, -312)
+texture = ExtResource("3_bg")
+
+[node name="Composite" type="Sprite2D" parent="."]
+texture_filter = 1
+centered = false
+position = Vector2(0, 0)
+texture = ExtResource("2_composite")
+
+[node name="Solid" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Player" parent="." instance=ExtResource("4_player")]
+position = Vector2(160, 690)
