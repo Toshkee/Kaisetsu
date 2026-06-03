@@ -99,7 +99,7 @@ const _DANGER_TINT: Color = Color(0.761, 0.353, 0.306, 1.0)  # #c25a4e
 ## Which SpriteFrames animation each state plays. States without a bespoke clip reuse a close one
 ## (jump/fall/heal/parry -> idle, charge -> attack, staggered/dead -> hurt until a death clip lands).
 const STATE_ANIM := {
-	"idle": "idle", "run": "walk", "jump": "jump", "fall": "fall",
+	"idle": "idle", "run": "walk", "jump": "idle", "fall": "idle",
 	"dodge": "dodge", "attack": "attack", "charge": "attack",
 	"heal": "idle", "parry": "idle", "staggered": "hurt", "dead": "death",
 }

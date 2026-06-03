@@ -119,7 +119,7 @@ position = Vector2(-100, 0)
 shrine_id = "mezame_outer"
 
 [node name="DriftHusk" parent="." unique_id=976565308 instance=ExtResource("2_husk")]
-position = Vector2(560, 0)
+position = Vector2(578, -292)
 
 [node name="DriftHusk2" parent="." unique_id=1607834914 instance=ExtResource("2_husk")]
 position = Vector2(760, 0)
