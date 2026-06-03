@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhnet1yohbbnv"
-path="res://.godot/imported/_preview.png-14c21363e514ac9c124085c3750e86d4.ctex"
+uid="uid://be1np2ykiwr0f"
+path="res://.godot/imported/2.png-478907b66bfa7440deeecd3381e9a97d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://_preview.png"
-dest_files=["res://.godot/imported/_preview.png-14c21363e514ac9c124085c3750e86d4.ctex"]
+source_file="res://assets/sprites/soji/death/2.png"
+dest_files=["res://.godot/imported/2.png-478907b66bfa7440deeecd3381e9a97d.ctex"]
 
 [params]
 

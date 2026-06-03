@@ -17,14 +17,15 @@ signal stats_changed
 # Tuning constants (CONVENTIONS.md §9 — exported so they're editable in the inspector)
 # ---------------------------------------------------------------------------
 @export_group("Movement")
-@export var speed: float = 110.0
-@export var accel: float = 900.0
+@export var speed: float = 130.0
+@export var accel: float = 1000.0
 @export var friction: float = 1100.0
 @export var jump_velocity: float = -300.0
 @export var gravity: float = 980.0
 @export var max_fall_speed: float = 600.0
 @export var coyote_time: float = 0.1
 @export var jump_buffer_time: float = 0.12
+@export var max_air_jumps: int = 1   # extra mid-air jumps after the first (1 = double jump)
 
 @export_group("Dodge")
 @export var dodge_speed: float = 260.0
@@ -83,6 +84,7 @@ var _dead: bool = false
 var _coyote_timer: float = 0.0
 var _flash_timer: float = 0.0
 var _hitstop_timer: float = 0.0
+var _air_jumps_used: int = 0   # reset on landing; spent by mid-air (double) jumps
 
 # Buffered inputs: action_name -> seconds remaining.
 var _buffers: Dictionary = {
@@ -97,7 +99,7 @@ const _DANGER_TINT: Color = Color(0.761, 0.353, 0.306, 1.0)  # #c25a4e
 ## Which SpriteFrames animation each state plays. States without a bespoke clip reuse a close one
 ## (jump/fall/heal/parry -> idle, charge -> attack, staggered/dead -> hurt until a death clip lands).
 const STATE_ANIM := {
-	"idle": "idle", "run": "walk", "jump": "idle", "fall": "idle",
+	"idle": "idle", "run": "walk", "jump": "jump", "fall": "fall",
 	"dodge": "dodge", "attack": "attack", "charge": "attack",
 	"heal": "idle", "parry": "idle", "staggered": "hurt", "dead": "death",
 }
@@ -135,6 +137,7 @@ func _physics_process(delta: float) -> void:
 		_coyote_timer -= delta
 	if is_on_floor():
 		_coyote_timer = coyote_time
+		_air_jumps_used = 0
 
 	_tick_buffers(delta)
 	_tick_flash(delta)
@@ -162,6 +165,15 @@ func set_horizontal(vx: float) -> void:
 func do_jump() -> void:
 	velocity.y = jump_velocity
 	_coyote_timer = 0.0
+
+## Spend a mid-air jump charge if any remain. Returns true and launches Sōji upward on success.
+func try_air_jump() -> bool:
+	if _air_jumps_used >= max_air_jumps:
+		return false
+	_air_jumps_used += 1
+	velocity.y = jump_velocity
+	_coyote_timer = 0.0
+	return true
 
 func has_coyote() -> bool:
 	return _coyote_timer > 0.0

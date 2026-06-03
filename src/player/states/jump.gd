@@ -2,8 +2,10 @@ extends PlayerState
 ## Rising portion of an airborne arc. Allows air control, dodge, and air attacks; variable jump
 ## height via releasing `jump` early (short-hop). Transitions to fall when velocity turns downward.
 
-func enter(_msg: Dictionary = {}) -> void:
-	player.do_jump()
+func enter(msg: Dictionary = {}) -> void:
+	# An air (double) jump has already launched via try_air_jump(); a ground jump launches here.
+	if not msg.get("air", false):
+		player.do_jump()
 
 func physics_update(delta: float) -> void:
 	# Variable jump height: cut the rise short if the player releases jump.
@@ -15,6 +17,12 @@ func physics_update(delta: float) -> void:
 	player.set_facing_from(dir)
 	player.apply_horizontal(dir, delta)
 	player.move()
+
+	# Double jump: a fresh press mid-rise spends an air-jump charge and re-launches.
+	if player.peek_buffer("jump") and player.try_air_jump():
+		player.consume_buffer("jump")
+		change_state("jump", {"air": true})
+		return
 
 	if _try_air_actions():
 		return

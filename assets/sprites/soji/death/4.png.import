@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dccctc1wcypbk"
-path="res://.godot/imported/mezame_tileset.png-5299bf718c476e9a647a395c666b513c.ctex"
+uid="uid://dvdyy7ekw26fh"
+path="res://.godot/imported/4.png-cad7c0eb75d5b1c2b7efed892887f3d1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/tiles/mezame_tileset.png"
-dest_files=["res://.godot/imported/mezame_tileset.png-5299bf718c476e9a647a395c666b513c.ctex"]
+source_file="res://assets/sprites/soji/death/4.png"
+dest_files=["res://.godot/imported/4.png-cad7c0eb75d5b1c2b7efed892887f3d1.ctex"]
 
 [params]
 

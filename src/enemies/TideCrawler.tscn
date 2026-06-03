@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://src/enemies/tide_crawler.gd" id="1_crawler"]
+[ext_resource type="Script" path="res://src/components/health.gd" id="2_health"]
+[ext_resource type="Script" path="res://src/components/hurtbox.gd" id="3_hurtbox"]
+[ext_resource type="Script" path="res://src/components/hitbox.gd" id="4_hitbox"]
+
+[sub_resource type="RectangleShape2D" id="Shape_body"]
+size = Vector2(22, 16)
+
+[sub_resource type="RectangleShape2D" id="Shape_hurt"]
+size = Vector2(22, 16)
+
+[sub_resource type="RectangleShape2D" id="Shape_attack"]
+size = Vector2(18, 14)
+
+[node name="TideCrawler" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 513
+script = ExtResource("1_crawler")
+reward_echoes = 3
+
+[node name="Sprite" type="ColorRect" parent="."]
+offset_left = -11.0
+offset_top = -16.0
+offset_right = 11.0
+offset_bottom = 0.0
+color = Color(0.235, 0.286, 0.353, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("Shape_body")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_health")
+max_health = 18.0
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 32
+script = ExtResource("3_hurtbox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -8)
+shape = SubResource("Shape_hurt")
+
+[node name="AttackHitbox" type="Area2D" parent="."]
+collision_layer = 64
+collision_mask = 0
+monitorable = false
+script = ExtResource("4_hitbox")
+damage = 10.0
+knockback = 140.0
+active = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+position = Vector2(14, -8)
+disabled = true
+shape = SubResource("Shape_attack")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(0, -8)
+rect = Rect2(-20, -16, 40, 32)

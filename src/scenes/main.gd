@@ -13,7 +13,7 @@ const CAM_LIMIT := Rect2(-240, -360, 1440, 560)
 
 @onready var world: Node2D = $World
 @onready var hud: CanvasLayer = $HUD
-@onready var room: Node2D = get_node_or_null("World/MezameShore")
+@onready var room: Node2D = _find_room()
 
 var player: Player
 var _spawn_point: Vector2
@@ -38,15 +38,26 @@ func _spawn_player(at: Vector2) -> void:
 	hud.bind_player(player)
 	_apply_camera_limits()
 
+## Returns the active level (first Node2D child of World) — works for MezameShore or TutorialZone.
+func _find_room() -> Node2D:
+	for c in $World.get_children():
+		if c is Node2D:
+			return c
+	return null
+
 func _apply_camera_limits() -> void:
 	if player == null or player.camera == null:
 		return
 	var base: Vector2 = room.global_position if room != null else Vector2.ZERO
+	# Prefer the level's own camera_bounds (TutorialZone exposes one); else the legacy constant.
+	var bounds: Rect2 = CAM_LIMIT
+	if room != null and room.get("camera_bounds") != null:
+		bounds = room.camera_bounds
 	var c := player.camera
-	c.limit_left = int(base.x + CAM_LIMIT.position.x)
-	c.limit_top = int(base.y + CAM_LIMIT.position.y)
-	c.limit_right = int(base.x + CAM_LIMIT.position.x + CAM_LIMIT.size.x)
-	c.limit_bottom = int(base.y + CAM_LIMIT.position.y + CAM_LIMIT.size.y)
+	c.limit_left = int(base.x + bounds.position.x)
+	c.limit_top = int(base.y + bounds.position.y)
+	c.limit_right = int(base.x + bounds.position.x + bounds.size.x)
+	c.limit_bottom = int(base.y + bounds.position.y + bounds.size.y)
 
 func _on_player_died() -> void:
 	if _respawning:

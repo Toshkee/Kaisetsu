@@ -19,7 +19,7 @@
 [ext_resource type="Script" path="res://src/player/states/parry.gd" id="17_parry"]
 [ext_resource type="Script" path="res://src/player/states/staggered.gd" id="18_stag"]
 [ext_resource type="Script" path="res://src/player/states/dead.gd" id="19_dead"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/soji/soji_frames.tres" id="20_frames"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/martial_hero/martial_hero_frames.tres" id="20_frames"]
 
 [sub_resource type="RectangleShape2D" id="Shape_body"]
 size = Vector2(24, 56)
@@ -51,8 +51,9 @@ collision_mask = 517
 script = ExtResource("1_player")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
 centered = false
-offset = Vector2(-62, -92)
+offset = Vector2(-93, -122)
 sprite_frames = ExtResource("20_frames")
 animation = &"idle"
 autoplay = "idle"

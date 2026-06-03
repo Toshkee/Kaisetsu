@@ -9,10 +9,16 @@ func physics_update(delta: float) -> void:
 	player.apply_horizontal(dir, delta)
 	player.move()
 
-	# Coyote jump: pressed jump while briefly off a ledge.
-	if player.consume_buffer("jump") and player.has_coyote():
-		change_state("jump")
-		return
+	# Jump while airborne: a coyote-time jump (free) if just off a ledge, else a double jump.
+	if player.peek_buffer("jump"):
+		if player.has_coyote():
+			player.consume_buffer("jump")
+			change_state("jump")
+			return
+		elif player.try_air_jump():
+			player.consume_buffer("jump")
+			change_state("jump", {"air": true})
+			return
 	if _try_air_actions():
 		return
 

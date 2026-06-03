@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://bdtuxb4eeknw1"]
 
 [ext_resource type="PackedScene" path="res://src/world/Shrine.tscn" id="1_shrine"]
 [ext_resource type="PackedScene" path="res://src/enemies/DriftHusk.tscn" id="2_husk"]
@@ -12,54 +12,54 @@ size = Vector2(40, 460)
 [sub_resource type="RectangleShape2D" id="Shape_ledge"]
 size = Vector2(260, 24)
 
-[node name="MezameShore" type="Node2D"]
+[node name="MezameShore" type="Node2D" unique_id=405703272]
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=764992952]
 color = Color(0.33, 0.38, 0.47, 1)
 
-[node name="Backdrop" type="Polygon2D" parent="."]
+[node name="Backdrop" type="Polygon2D" parent="." unique_id=139528987]
 z_index = -100
+position = Vector2(-92, -47)
 color = Color(0.078, 0.09, 0.122, 1)
 polygon = PackedVector2Array(-420, -520, 1380, -520, 1380, 220, -420, 220)
 
-[node name="Silhouettes" type="Node2D" parent="."]
+[node name="Silhouettes" type="Node2D" parent="." unique_id=908894]
 z_index = -60
 
-[node name="ShipHull" type="Polygon2D" parent="Silhouettes"]
+[node name="ShipHull" type="Polygon2D" parent="Silhouettes" unique_id=1723891296]
 color = Color(0.106, 0.122, 0.165, 1)
 polygon = PackedVector2Array(120, 4, 470, 4, 540, -70, 250, -150, 60, -96)
 
-[node name="ShipMast" type="Polygon2D" parent="Silhouettes"]
+[node name="ShipMast" type="Polygon2D" parent="Silhouettes" unique_id=1577522036]
 color = Color(0.106, 0.122, 0.165, 1)
 polygon = PackedVector2Array(300, -150, 312, -150, 312, -300, 300, -300)
 
-[node name="DockPostA" type="Polygon2D" parent="Silhouettes"]
+[node name="DockPostA" type="Polygon2D" parent="Silhouettes" unique_id=1788160559]
 color = Color(0.094, 0.11, 0.149, 1)
 polygon = PackedVector2Array(820, 4, 838, 4, 838, -120, 820, -120)
 
-[node name="DockPostB" type="Polygon2D" parent="Silhouettes"]
+[node name="DockPostB" type="Polygon2D" parent="Silhouettes" unique_id=1934432867]
 color = Color(0.094, 0.11, 0.149, 1)
 polygon = PackedVector2Array(900, 4, 916, 4, 916, -150, 900, -150)
 
-[node name="FogFar" type="Polygon2D" parent="."]
+[node name="FogFar" type="Polygon2D" parent="." unique_id=1258031245]
 z_index = -50
 color = Color(0.455, 0.529, 0.604, 0.05)
 polygon = PackedVector2Array(-420, -260, 1380, -260, 1380, -120, -420, -120)
 
-[node name="FogNear" type="Polygon2D" parent="."]
+[node name="FogNear" type="Polygon2D" parent="." unique_id=481945537]
 z_index = -40
 color = Color(0.455, 0.529, 0.604, 0.06)
 polygon = PackedVector2Array(-420, -110, 1380, -110, 1380, 40, -420, 40)
 
-[node name="Mist" type="CPUParticles2D" parent="."]
-position = Vector2(480, -120)
+[node name="Mist" type="CPUParticles2D" parent="." unique_id=2105915446]
 z_index = -30
+position = Vector2(480, -120)
 amount = 28
 lifetime = 9.0
 preprocess = 6.0
 emission_shape = 1
-emission_rect_extents = Vector2(820, 160)
-direction = Vector2(1, 0)
+emission_sphere_radius = 1.0
 spread = 30.0
 gravity = Vector2(0, 0)
 initial_velocity_min = 4.0
@@ -68,59 +68,58 @@ scale_amount_min = 2.0
 scale_amount_max = 5.0
 color = Color(0.624, 0.694, 0.769, 0.07)
 
-[node name="Terrain" type="StaticBody2D" parent="."]
-collision_layer = 1
+[node name="Terrain" type="StaticBody2D" parent="." unique_id=43062951]
 collision_mask = 0
 
-[node name="FloorVisual" type="Polygon2D" parent="Terrain"]
+[node name="FloorVisual" type="Polygon2D" parent="Terrain" unique_id=1571382669]
 color = Color(0.165, 0.2, 0.251, 1)
 polygon = PackedVector2Array(-240, 0, 1200, 0, 1200, 80, -240, 80)
 
-[node name="FloorEdge" type="Polygon2D" parent="Terrain"]
+[node name="FloorEdge" type="Polygon2D" parent="Terrain" unique_id=1983425369]
 color = Color(0.235, 0.29, 0.353, 1)
 polygon = PackedVector2Array(-240, 0, 1200, 0, 1200, 5, -240, 5)
 
-[node name="Floor" type="CollisionShape2D" parent="Terrain"]
+[node name="Floor" type="CollisionShape2D" parent="Terrain" unique_id=473326719]
 position = Vector2(480, 40)
 shape = SubResource("Shape_floor")
 
-[node name="WallLeftVisual" type="Polygon2D" parent="Terrain"]
+[node name="WallLeftVisual" type="Polygon2D" parent="Terrain" unique_id=1917704858]
 color = Color(0.106, 0.122, 0.165, 1)
 polygon = PackedVector2Array(-260, -410, -220, -410, -220, 50, -260, 50)
 
-[node name="WallLeft" type="CollisionShape2D" parent="Terrain"]
+[node name="WallLeft" type="CollisionShape2D" parent="Terrain" unique_id=444839747]
 position = Vector2(-240, -180)
 shape = SubResource("Shape_wall")
 
-[node name="WallRightVisual" type="Polygon2D" parent="Terrain"]
+[node name="WallRightVisual" type="Polygon2D" parent="Terrain" unique_id=381909199]
 color = Color(0.106, 0.122, 0.165, 1)
 polygon = PackedVector2Array(1180, -410, 1220, -410, 1220, 50, 1180, 50)
 
-[node name="WallRight" type="CollisionShape2D" parent="Terrain"]
+[node name="WallRight" type="CollisionShape2D" parent="Terrain" unique_id=1989999642]
 position = Vector2(1200, -180)
 shape = SubResource("Shape_wall")
 
-[node name="LedgeVisual" type="Polygon2D" parent="Terrain"]
+[node name="LedgeVisual" type="Polygon2D" parent="Terrain" unique_id=683909517]
 color = Color(0.235, 0.29, 0.353, 1)
 polygon = PackedVector2Array(850, -40, 1110, -40, 1110, -16, 850, -16)
 
-[node name="LedgeEdge" type="Polygon2D" parent="Terrain"]
+[node name="LedgeEdge" type="Polygon2D" parent="Terrain" unique_id=1616915822]
 color = Color(0.341, 0.42, 0.51, 1)
 polygon = PackedVector2Array(850, -40, 1110, -40, 1110, -36, 850, -36)
 
-[node name="Ledge" type="CollisionShape2D" parent="Terrain"]
+[node name="Ledge" type="CollisionShape2D" parent="Terrain" unique_id=546065540]
 position = Vector2(980, -28)
 shape = SubResource("Shape_ledge")
 
-[node name="PlayerSpawn" type="Marker2D" parent="." groups=["player_spawn"]]
+[node name="PlayerSpawn" type="Marker2D" parent="." unique_id=2095165733 groups=["player_spawn"]]
 position = Vector2(40, 0)
 
-[node name="Shrine" parent="." instance=ExtResource("1_shrine")]
+[node name="Shrine" parent="." unique_id=1059147340 instance=ExtResource("1_shrine")]
 position = Vector2(-100, 0)
 shrine_id = "mezame_outer"
 
-[node name="DriftHusk" parent="." instance=ExtResource("2_husk")]
+[node name="DriftHusk" parent="." unique_id=976565308 instance=ExtResource("2_husk")]
 position = Vector2(560, 0)
 
-[node name="DriftHusk2" parent="." instance=ExtResource("2_husk")]
+[node name="DriftHusk2" parent="." unique_id=1607834914 instance=ExtResource("2_husk")]
 position = Vector2(760, 0)

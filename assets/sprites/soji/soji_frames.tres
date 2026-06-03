@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=31 format=3]
+[gd_resource type="SpriteFrames" load_steps=38 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/sprites/soji/idle/0.png" id="f0"]
 [ext_resource type="Texture2D" path="res://assets/sprites/soji/idle/1.png" id="f1"]
@@ -30,6 +30,13 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/soji/hurt/3.png" id="f27"]
 [ext_resource type="Texture2D" path="res://assets/sprites/soji/hurt/4.png" id="f28"]
 [ext_resource type="Texture2D" path="res://assets/sprites/soji/hurt/5.png" id="f29"]
+[ext_resource type="Texture2D" path="res://assets/sprites/soji/death/0.png" id="f30"]
+[ext_resource type="Texture2D" path="res://assets/sprites/soji/death/1.png" id="f31"]
+[ext_resource type="Texture2D" path="res://assets/sprites/soji/death/2.png" id="f32"]
+[ext_resource type="Texture2D" path="res://assets/sprites/soji/death/3.png" id="f33"]
+[ext_resource type="Texture2D" path="res://assets/sprites/soji/death/4.png" id="f34"]
+[ext_resource type="Texture2D" path="res://assets/sprites/soji/death/5.png" id="f35"]
+[ext_resource type="Texture2D" path="res://assets/sprites/soji/death/6.png" id="f36"]
 
 [resource]
 animations = [{
@@ -57,4 +64,9 @@ animations = [{
 "loop": false,
 "name": &"hurt",
 "speed": 12.0
+}, {
+"frames": [{"duration": 1.0, "texture": ExtResource("f30")}, {"duration": 1.0, "texture": ExtResource("f31")}, {"duration": 1.0, "texture": ExtResource("f32")}, {"duration": 1.0, "texture": ExtResource("f33")}, {"duration": 1.0, "texture": ExtResource("f34")}, {"duration": 1.0, "texture": ExtResource("f35")}, {"duration": 1.0, "texture": ExtResource("f36")}],
+"loop": false,
+"name": &"death",
+"speed": 10.0
 }]

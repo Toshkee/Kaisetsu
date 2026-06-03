@@ -58,6 +58,12 @@ desktop.ini
 *~
 .cache/
 
+# --- Dev preview screenshots / scratch tool files ---
+/_preview.png
+/_title.png
+/_game.png
+tools/_probe.gd
+
 # --- Logs & temp ---
 *.log
 logs/

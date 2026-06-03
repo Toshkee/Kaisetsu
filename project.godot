@@ -12,7 +12,7 @@ config_version=5
 
 config/name="KAISETSU"
 config/description="A 2D soulslike. Sōji, the last disciple, re-lights the Sealing Shrines across cursed islands."
-run/main_scene="res://src/scenes/Main.tscn"
+run/main_scene="res://src/ui/TitleScreen.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -22,6 +22,7 @@ Settings="*res://src/autoload/settings.gd"
 GameState="*res://src/autoload/game_state.gd"
 MusicManager="*res://src/autoload/music_manager.gd"
 SaveManager="*res://src/autoload/save_manager.gd"
+GameFlow="*res://src/autoload/game_flow.gd"
 
 [display]
 
