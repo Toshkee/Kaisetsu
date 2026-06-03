@@ -36,7 +36,7 @@ func handle_input(event: InputEvent) -> void:
 	player.buffer_input(event)
 
 func _try_air_actions() -> bool:
-	if player.consume_buffer("dodge") and player.stamina.can_spend(player.dodge_stamina):
+	if player.consume_buffer("dodge") and player.can_dodge():
 		change_state("dodge")
 		return true
 	if player.consume_buffer("attack"):

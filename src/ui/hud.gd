@@ -53,6 +53,10 @@ var _stamina_frac: float = 1.0
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_apply_palette()
+	# Stamina is no longer a gameplay resource (Isadora-style movement-first); hide its bar.
+	var stamina_bar := $Bars/StaminaBar
+	if stamina_bar:
+		stamina_bar.visible = false
 	# Start visible; idle timer will fade us out if nothing happens.
 	_bars.modulate.a = ACTIVE_ALPHA
 	_idle_timer = IDLE_FADE_DELAY

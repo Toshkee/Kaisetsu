@@ -9,7 +9,6 @@ func enter(_msg: Dictionary = {}) -> void:
 	_t = 0.0
 	_hit_done = false
 	player.set_facing_from(move_axis())
-	player.stamina.spend(player.light_attack_stamina)
 	# Small forward nudge.
 	player.set_horizontal(player.facing * 90.0)
 	player.disable_attack()

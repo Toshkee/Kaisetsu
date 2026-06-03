@@ -27,11 +27,8 @@ func _try_action_transitions() -> bool:
 	if player.consume_buffer("jump") and (player.is_on_floor() or player.has_coyote()):
 		change_state("jump")
 		return true
-	if player.consume_buffer("dodge") and player.stamina.can_spend(player.dodge_stamina):
+	if player.consume_buffer("dodge") and player.can_dodge():
 		change_state("dodge")
-		return true
-	if player.consume_buffer("parry"):
-		change_state("parry")
 		return true
 	if player.consume_buffer("attack"):
 		# `charge` is the hold-detector: a quick release => light attack, a long hold => heavy.

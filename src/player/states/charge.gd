@@ -49,19 +49,11 @@ func _update_windup(delta: float) -> void:
 
 	# Released early -> light attack (the "tap").
 	if not Input.is_action_pressed(&"attack") and _t < player.charge_time:
-		# Need stamina for the light swing; if broke, just go back to neutral.
-		if player.stamina.can_spend(player.light_attack_stamina):
-			change_state("attack")
-		else:
-			_to_neutral()
+		change_state("attack")
 		return
 
 	# Held past the threshold -> commit the heavy.
 	if _t >= player.charge_time:
-		if not player.stamina.can_spend(player.charge_stamina):
-			_to_neutral()
-			return
-		player.stamina.spend(player.charge_stamina)
 		_phase = Phase.SWING
 		_t = 0.0
 		# Forward nudge into the heavy.

@@ -1,54 +1,48 @@
 extends PlayerState
-## The roll. Commits for `dodge_time`; cannot be cancelled except by death. Grants i-frames in a
-## window inside the roll (dodge_iframe_start..dodge_iframe_end) during which incoming hits are
-## ignored. Costs stamina on entry. Drives a fixed horizontal burst along facing.
+## The dash — KAISETSU's Isadora-style dodge. A free, snappy horizontal burst that grants
+## invincibility for its ENTIRE duration (no inner window). Commits for `dodge_time`, then hands
+## back to a neutral state. Gated only by a brief cooldown (`dodge_cooldown`), NOT stamina — the
+## dash IS the dodge, so movement stays free-flowing.
 
 var _t: float = 0.0
-var _iframes: bool = false
 
 func enter(_msg: Dictionary = {}) -> void:
 	_t = 0.0
-	_iframes = false
 	player.disable_attack()
-	# Spend stamina (callers gate on can_spend; double-check to be safe).
-	player.stamina.spend(player.dodge_stamina)
-	# Aim the roll: along current movement intent if any, else along facing.
+	# I-frames for the WHOLE dash.
+	player.set_invulnerable(true)
+	player.start_dodge_cooldown()
+	# Aim along movement intent if any, else along current facing.
 	var dir := move_axis()
 	if absf(dir) > 0.01:
 		player.set_facing_from(dir)
+	# Flat, gravity-free burst — reads as a deliberate dash and lets you cross gaps.
+	player.velocity.y = 0.0
 	player.set_horizontal(player.facing * player.dodge_speed)
 
 func exit() -> void:
 	player.set_invulnerable(false)
-	_iframes = false
 
 func physics_update(delta: float) -> void:
 	_t += delta
-	# Maintain the burst, gently decaying so it eases out of the roll.
-	var roll_progress := clampf(_t / player.dodge_time, 0.0, 1.0)
-	var speed := player.dodge_speed * (1.0 - 0.35 * roll_progress)
+	# Hold the burst flat; a gentle decay eases out without killing the snap.
+	var progress := clampf(_t / player.dodge_time, 0.0, 1.0)
+	var speed := player.dodge_speed * (1.0 - 0.2 * progress)
 	player.set_horizontal(player.facing * speed)
-	player.apply_gravity(delta)
+	player.velocity.y = 0.0
 	player.move()
-
-	# Toggle the i-frame window.
-	var want_iframes := _t >= player.dodge_iframe_start and _t <= player.dodge_iframe_end
-	if want_iframes != _iframes:
-		_iframes = want_iframes
-		player.set_invulnerable(_iframes)
 
 	if _t >= player.dodge_time:
 		_finish()
 
 func handle_input(event: InputEvent) -> void:
-	# Buffer for the action that follows the roll (snappy chaining out of dodge).
+	# Buffer the action that follows the dash (snappy chaining out of it).
 	player.buffer_input(event)
 
-## During i-frames the contract says ignore the hit entirely. Outside the window, take it.
+## I-frames span the whole dash, so incoming hits are ignored. (Kept defensive.)
 func on_hurt(hitbox: Hitbox) -> void:
-	if _iframes or player.is_invulnerable():
+	if player.is_invulnerable():
 		return
-	# Dodge can't be cancelled except by death, but a connecting hit should still register.
 	player.take_hit(hitbox)
 
 func _finish() -> void:

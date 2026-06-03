@@ -22,17 +22,18 @@ signal stats_changed
 @export var friction: float = 1100.0
 @export var jump_velocity: float = -300.0
 @export var gravity: float = 980.0
+@export var fall_gravity_mult: float = 1.4   # fall faster than you rise (snappy Isadora-style apex)
 @export var max_fall_speed: float = 600.0
 @export var coyote_time: float = 0.1
 @export var jump_buffer_time: float = 0.12
 @export var max_air_jumps: int = 1   # extra mid-air jumps after the first (1 = double jump)
 
-@export_group("Dodge")
-@export var dodge_speed: float = 260.0
-@export var dodge_time: float = 0.40
-@export var dodge_iframe_start: float = 0.05
-@export var dodge_iframe_end: float = 0.32
-@export var dodge_stamina: float = 25.0
+@export_group("Dash")
+## Isadora-style dash: a free, snappy horizontal burst, i-frame'd for its WHOLE duration.
+## The single dodge tool — short and committal, gated only by a brief cooldown (no stamina).
+@export var dodge_speed: float = 360.0
+@export var dodge_time: float = 0.18
+@export var dodge_cooldown: float = 0.30
 
 @export_group("Attack")
 @export var light_attack_stamina: float = 12.0
@@ -85,6 +86,7 @@ var _coyote_timer: float = 0.0
 var _flash_timer: float = 0.0
 var _hitstop_timer: float = 0.0
 var _air_jumps_used: int = 0   # reset on landing; spent by mid-air (double) jumps
+var _dodge_cd_timer: float = 0.0   # brief lockout after a dash so the free dash can't be spammed
 
 # Buffered inputs: action_name -> seconds remaining.
 var _buffers: Dictionary = {
@@ -138,6 +140,8 @@ func _physics_process(delta: float) -> void:
 	if is_on_floor():
 		_coyote_timer = coyote_time
 		_air_jumps_used = 0
+	if _dodge_cd_timer > 0.0:
+		_dodge_cd_timer -= delta
 
 	_tick_buffers(delta)
 	_tick_flash(delta)
@@ -148,7 +152,9 @@ func _physics_process(delta: float) -> void:
 # ---------------------------------------------------------------------------
 func apply_gravity(delta: float) -> void:
 	if not is_on_floor():
-		velocity.y = minf(velocity.y + gravity * delta, max_fall_speed)
+		# Asymmetric gravity: fall faster than you rise for a snappy, Isadora-style apex.
+		var g := gravity * (fall_gravity_mult if velocity.y > 0.0 else 1.0)
+		velocity.y = minf(velocity.y + g * delta, max_fall_speed)
 
 ## Accelerate horizontal velocity toward `dir` (-1..1) * top speed, or decelerate to 0 when dir==0.
 func apply_horizontal(dir: float, delta: float) -> void:
@@ -177,6 +183,13 @@ func try_air_jump() -> bool:
 
 func has_coyote() -> bool:
 	return _coyote_timer > 0.0
+
+## Dash gating: a brief cooldown replaces the old stamina cost so the dash stays free but unspammable.
+func can_dodge() -> bool:
+	return _dodge_cd_timer <= 0.0
+
+func start_dodge_cooldown() -> void:
+	_dodge_cd_timer = dodge_cooldown
 
 func move() -> void:
 	move_and_slide()

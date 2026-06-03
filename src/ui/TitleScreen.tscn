@@ -1,21 +1,8 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene format=3 uid="uid://fvm1qss8c8fd"]
 
-[ext_resource type="Script" path="res://src/ui/title_screen.gd" id="1_title"]
-[ext_resource type="Texture2D" path="res://assets/sprites/soji/east.png" id="2_soji"]
-[ext_resource type="Texture2D" path="res://assets/sprites/props/shrine.png" id="3_shrine"]
+[ext_resource type="Script" uid="uid://ctdaxw2pjnmlj" path="res://src/ui/title_screen.gd" id="1_title"]
+[ext_resource type="Texture2D" uid="uid://yub10erywoux" path="res://assets/sprites/props/shrine.png" id="3_shrine"]
 [ext_resource type="SpriteFrames" path="res://assets/sprites/soji/soji_frames.tres" id="4_frames"]
-
-[sub_resource type="Gradient" id="Grad_mist"]
-offsets = PackedFloat32Array(0, 0.5, 1)
-colors = PackedColorArray(0.235, 0.29, 0.353, 0, 0.235, 0.29, 0.353, 0.18, 0.235, 0.29, 0.353, 0)
-
-[sub_resource type="GradientTexture2D" id="Tex_mist"]
-gradient = SubResource("Grad_mist")
-width = 16
-height = 16
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
 
 [sub_resource type="Gradient" id="Grad_glow"]
 offsets = PackedFloat32Array(0, 0.6, 1)
@@ -25,6 +12,18 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.45, 1, 1, 1, 0)
 gradient = SubResource("Grad_glow")
 width = 128
 height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Grad_mist"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.235, 0.29, 0.353, 0, 0.235, 0.29, 0.353, 0.18, 0.235, 0.29, 0.353, 0)
+
+[sub_resource type="GradientTexture2D" id="Tex_mist"]
+gradient = SubResource("Grad_mist")
+width = 16
+height = 16
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
@@ -41,7 +40,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.55)
 fill_to = Vector2(1, 1)
 
-[node name="TitleScreen" type="Control"]
+[node name="TitleScreen" type="Control" unique_id=147799626]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -50,7 +49,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_title")
 
-[node name="Sky" type="ColorRect" parent="."]
+[node name="Sky" type="ColorRect" parent="." unique_id=1621300727]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -60,7 +59,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.106, 0.122, 0.165, 1)
 
-[node name="FogBandFar" type="ColorRect" parent="."]
+[node name="FogBandFar" type="ColorRect" parent="." unique_id=103242963]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -72,7 +71,7 @@ grow_vertical = 0
 mouse_filter = 2
 color = Color(0.165, 0.2, 0.251, 0.55)
 
-[node name="FogBandNear" type="ColorRect" parent="."]
+[node name="FogBandNear" type="ColorRect" parent="." unique_id=955947694]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -84,7 +83,7 @@ grow_vertical = 0
 mouse_filter = 2
 color = Color(0.059, 0.067, 0.09, 0.7)
 
-[node name="Ground" type="ColorRect" parent="."]
+[node name="Ground" type="ColorRect" parent="." unique_id=553984695]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -96,39 +95,39 @@ grow_vertical = 0
 mouse_filter = 2
 color = Color(0.059, 0.067, 0.09, 1)
 
-[node name="Atmosphere" type="Node2D" parent="."]
+[node name="Atmosphere" type="Node2D" parent="." unique_id=596274816]
 
-[node name="ShrineLight" type="PointLight2D" parent="Atmosphere"]
+[node name="ShrineLight" type="PointLight2D" parent="Atmosphere" unique_id=1051322845]
 position = Vector2(470, 230)
 color = Color(0.949, 0.651, 0.353, 1)
 energy = 0.7
-texture_scale = 2.4
 texture = SubResource("Tex_glow")
+texture_scale = 2.4
 
-[node name="Shrine" type="Sprite2D" parent="Atmosphere"]
+[node name="Shrine" type="Sprite2D" parent="Atmosphere" unique_id=1096126996]
+self_modulate = Color(0.85, 0.78, 0.66, 1)
 texture_filter = 1
 position = Vector2(470, 250)
 scale = Vector2(2, 2)
-self_modulate = Color(0.85, 0.78, 0.66, 1)
 texture = ExtResource("3_shrine")
 
-[node name="Soji" type="AnimatedSprite2D" parent="Atmosphere"]
+[node name="Soji" type="AnimatedSprite2D" parent="Atmosphere" unique_id=693808953]
+self_modulate = Color(0.62, 0.67, 0.77, 0.95)
 texture_filter = 1
 position = Vector2(150, 316)
 scale = Vector2(1.6, 1.6)
-self_modulate = Color(0.62, 0.67, 0.77, 0.95)
-centered = false
-offset = Vector2(-62, -92)
 sprite_frames = ExtResource("4_frames")
 animation = &"idle"
 autoplay = "idle"
+centered = false
+offset = Vector2(-62, -92)
 
-[node name="Embers" type="CPUParticles2D" parent="Atmosphere"]
+[node name="Embers" type="CPUParticles2D" parent="Atmosphere" unique_id=118196883]
 position = Vector2(470, 236)
 amount = 12
+texture = SubResource("Tex_glow")
 lifetime = 2.6
 randomness = 0.7
-texture = SubResource("Tex_glow")
 emission_shape = 1
 emission_sphere_radius = 9.0
 direction = Vector2(0, -1)
@@ -140,13 +139,13 @@ scale_amount_min = 0.05
 scale_amount_max = 0.14
 color = Color(0.949, 0.651, 0.353, 0.85)
 
-[node name="Ash" type="CPUParticles2D" parent="Atmosphere"]
+[node name="Ash" type="CPUParticles2D" parent="Atmosphere" unique_id=239587917]
 position = Vector2(320, -12)
 amount = 38
+texture = SubResource("Tex_mist")
 lifetime = 11.0
 preprocess = 8.0
 randomness = 0.85
-texture = SubResource("Tex_mist")
 emission_shape = 3
 emission_rect_extents = Vector2(360, 8)
 direction = Vector2(0.25, 1)
@@ -154,20 +153,18 @@ spread = 12.0
 gravity = Vector2(5, 9)
 initial_velocity_min = 5.0
 initial_velocity_max = 13.0
-scale_amount_min = 1.0
 scale_amount_max = 3.0
 color = Color(0.624, 0.694, 0.769, 0.16)
 
-[node name="Mist" type="CPUParticles2D" parent="Atmosphere"]
+[node name="Mist" type="CPUParticles2D" parent="Atmosphere" unique_id=824909803]
 position = Vector2(-40, 300)
 amount = 24
+texture = SubResource("Tex_mist")
 lifetime = 14.0
 preprocess = 8.0
 randomness = 0.6
-texture = SubResource("Tex_mist")
 emission_shape = 3
 emission_rect_extents = Vector2(40, 80)
-direction = Vector2(1, 0)
 spread = 8.0
 gravity = Vector2(0, -2)
 initial_velocity_min = 14.0
@@ -176,7 +173,7 @@ scale_amount_min = 6.0
 scale_amount_max = 14.0
 color = Color(0.455, 0.529, 0.6, 0.2)
 
-[node name="Vignette" type="TextureRect" parent="."]
+[node name="Vignette" type="TextureRect" parent="." unique_id=1985526642]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -186,18 +183,19 @@ grow_vertical = 2
 mouse_filter = 2
 texture = SubResource("Tex_vignette")
 expand_mode = 1
-stretch_mode = 0
 
-[node name="Layout" type="Control" parent="."]
+[node name="Layout" type="Control" parent="." unique_id=1435519000]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -3.0
+offset_right = -3.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TitleBlock" type="VBoxContainer" parent="Layout"]
+[node name="TitleBlock" type="VBoxContainer" parent="Layout" unique_id=1633567570]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -207,10 +205,10 @@ offset_top = 56.0
 offset_right = 180.0
 offset_bottom = 140.0
 grow_horizontal = 2
-theme_override_constants/separation = 2
 mouse_filter = 2
+theme_override_constants/separation = 2
 
-[node name="Title" type="Label" parent="Layout/TitleBlock"]
+[node name="Title" type="Label" parent="Layout/TitleBlock" unique_id=1685315837]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.847, 0.651, 0.341, 1)
 theme_override_colors/font_shadow_color = Color(0.059, 0.067, 0.09, 0.6)
@@ -220,14 +218,14 @@ theme_override_font_sizes/font_size = 64
 text = "KAISETSU"
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="Layout/TitleBlock"]
+[node name="Subtitle" type="Label" parent="Layout/TitleBlock" unique_id=471771170]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.624, 0.659, 0.706, 1)
 theme_override_font_sizes/font_size = 16
 text = "The Last Disciple"
 horizontal_alignment = 1
 
-[node name="MenuColumn" type="VBoxContainer" parent="Layout"]
+[node name="MenuColumn" type="VBoxContainer" parent="Layout" unique_id=917410435]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -239,7 +237,7 @@ offset_bottom = 340.0
 grow_horizontal = 2
 theme_override_constants/separation = 6
 
-[node name="NewGameButton" type="Button" parent="Layout/MenuColumn"]
+[node name="NewGameButton" type="Button" parent="Layout/MenuColumn" unique_id=906733589]
 layout_mode = 2
 focus_neighbor_top = NodePath("../QuitButton")
 focus_neighbor_bottom = NodePath("../ContinueButton")
@@ -247,10 +245,10 @@ theme_override_colors/font_color = Color(0.753, 0.792, 0.839, 1)
 theme_override_colors/font_focus_color = Color(0.847, 0.651, 0.341, 1)
 theme_override_colors/font_hover_color = Color(0.847, 0.651, 0.341, 1)
 theme_override_font_sizes/font_size = 18
-flat = true
 text = "New Game"
+flat = true
 
-[node name="ContinueButton" type="Button" parent="Layout/MenuColumn"]
+[node name="ContinueButton" type="Button" parent="Layout/MenuColumn" unique_id=1047917114]
 layout_mode = 2
 focus_neighbor_top = NodePath("../NewGameButton")
 focus_neighbor_bottom = NodePath("../SettingsButton")
@@ -259,10 +257,10 @@ theme_override_colors/font_focus_color = Color(0.847, 0.651, 0.341, 1)
 theme_override_colors/font_hover_color = Color(0.847, 0.651, 0.341, 1)
 theme_override_colors/font_disabled_color = Color(0.333, 0.408, 0.478, 1)
 theme_override_font_sizes/font_size = 18
-flat = true
 text = "Continue"
+flat = true
 
-[node name="SettingsButton" type="Button" parent="Layout/MenuColumn"]
+[node name="SettingsButton" type="Button" parent="Layout/MenuColumn" unique_id=1052053310]
 layout_mode = 2
 focus_neighbor_top = NodePath("../ContinueButton")
 focus_neighbor_bottom = NodePath("../QuitButton")
@@ -270,10 +268,10 @@ theme_override_colors/font_color = Color(0.753, 0.792, 0.839, 1)
 theme_override_colors/font_focus_color = Color(0.847, 0.651, 0.341, 1)
 theme_override_colors/font_hover_color = Color(0.847, 0.651, 0.341, 1)
 theme_override_font_sizes/font_size = 18
-flat = true
 text = "Settings"
+flat = true
 
-[node name="QuitButton" type="Button" parent="Layout/MenuColumn"]
+[node name="QuitButton" type="Button" parent="Layout/MenuColumn" unique_id=438228852]
 layout_mode = 2
 focus_neighbor_top = NodePath("../SettingsButton")
 focus_neighbor_bottom = NodePath("../NewGameButton")
@@ -281,5 +279,5 @@ theme_override_colors/font_color = Color(0.753, 0.792, 0.839, 1)
 theme_override_colors/font_focus_color = Color(0.847, 0.651, 0.341, 1)
 theme_override_colors/font_hover_color = Color(0.847, 0.651, 0.341, 1)
 theme_override_font_sizes/font_size = 18
-flat = true
 text = "Quit"
+flat = true
