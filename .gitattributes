@@ -1,0 +1,27 @@
+# KAISETSU — git attributes (Godot project)
+# Normalize line endings for text-y Godot resources.
+* text=auto eol=lf
+
+# Godot text resources — treat as text, diffable.
+*.gd        text
+*.tscn      text
+*.tres      text
+*.godot     text
+*.cfg       text
+*.import    text
+*.md        text
+*.json      text
+
+# Binary assets — never try to merge/diff.
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.webp      binary
+*.ogg       binary
+*.wav       binary
+*.mp3       binary
+*.ttf       binary
+*.otf       binary
+*.aseprite  binary
+*.ase       binary
+*.ttf       binary

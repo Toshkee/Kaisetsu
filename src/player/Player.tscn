@@ -1,0 +1,161 @@
+[gd_scene load_steps=32 format=3]
+
+[ext_resource type="Script" path="res://src/player/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://src/components/health.gd" id="2_health"]
+[ext_resource type="Script" path="res://src/components/stamina.gd" id="3_stamina"]
+[ext_resource type="Script" path="res://src/components/focus.gd" id="4_focus"]
+[ext_resource type="Script" path="res://src/components/hurtbox.gd" id="5_hurtbox"]
+[ext_resource type="Script" path="res://src/components/hitbox.gd" id="6_hitbox"]
+[ext_resource type="Script" path="res://src/player/state_machine.gd" id="7_sm"]
+[ext_resource type="Script" path="res://src/player/game_camera.gd" id="8_camera"]
+[ext_resource type="Script" path="res://src/player/states/idle.gd" id="9_idle"]
+[ext_resource type="Script" path="res://src/player/states/run.gd" id="10_run"]
+[ext_resource type="Script" path="res://src/player/states/jump.gd" id="11_jump"]
+[ext_resource type="Script" path="res://src/player/states/fall.gd" id="12_fall"]
+[ext_resource type="Script" path="res://src/player/states/dodge.gd" id="13_dodge"]
+[ext_resource type="Script" path="res://src/player/states/attack.gd" id="14_attack"]
+[ext_resource type="Script" path="res://src/player/states/charge.gd" id="15_charge"]
+[ext_resource type="Script" path="res://src/player/states/heal.gd" id="16_heal"]
+[ext_resource type="Script" path="res://src/player/states/parry.gd" id="17_parry"]
+[ext_resource type="Script" path="res://src/player/states/staggered.gd" id="18_stag"]
+[ext_resource type="Script" path="res://src/player/states/dead.gd" id="19_dead"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/soji/soji_frames.tres" id="20_frames"]
+
+[sub_resource type="RectangleShape2D" id="Shape_body"]
+size = Vector2(24, 56)
+
+[sub_resource type="RectangleShape2D" id="Shape_hurt"]
+size = Vector2(26, 58)
+
+[sub_resource type="RectangleShape2D" id="Shape_attack"]
+size = Vector2(34, 44)
+
+[sub_resource type="CircleShape2D" id="Shape_interact"]
+radius = 26.0
+
+[sub_resource type="Gradient" id="Grad_light"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="Tex_light"]
+gradient = SubResource("Grad_light")
+width = 192
+height = 192
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+collision_layer = 2
+collision_mask = 517
+script = ExtResource("1_player")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+centered = false
+offset = Vector2(-62, -92)
+sprite_frames = ExtResource("20_frames")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -28)
+shape = SubResource("Shape_body")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_health")
+max_health = 100.0
+
+[node name="Stamina" type="Node" parent="."]
+script = ExtResource("3_stamina")
+max_stamina = 100.0
+regen_rate = 50.0
+regen_delay = 0.45
+
+[node name="Focus" type="Node" parent="."]
+script = ExtResource("4_focus")
+max_focus = 3.0
+heal_cost = 1.0
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 64
+monitoring = true
+monitorable = false
+script = ExtResource("5_hurtbox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -28)
+shape = SubResource("Shape_hurt")
+
+[node name="AttackHitbox" type="Area2D" parent="."]
+position = Vector2(24, -30)
+collision_layer = 32
+collision_mask = 0
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+damage = 18.0
+knockback = 220.0
+parryable = false
+active = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+shape = SubResource("Shape_attack")
+disabled = true
+
+[node name="Interactor" type="Area2D" parent="."]
+position = Vector2(16, -28)
+collision_layer = 256
+collision_mask = 128
+monitoring = true
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactor"]
+shape = SubResource("Shape_interact")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("7_sm")
+initial_state = "idle"
+
+[node name="idle" type="Node" parent="StateMachine"]
+script = ExtResource("9_idle")
+
+[node name="run" type="Node" parent="StateMachine"]
+script = ExtResource("10_run")
+
+[node name="jump" type="Node" parent="StateMachine"]
+script = ExtResource("11_jump")
+
+[node name="fall" type="Node" parent="StateMachine"]
+script = ExtResource("12_fall")
+
+[node name="dodge" type="Node" parent="StateMachine"]
+script = ExtResource("13_dodge")
+
+[node name="attack" type="Node" parent="StateMachine"]
+script = ExtResource("14_attack")
+
+[node name="charge" type="Node" parent="StateMachine"]
+script = ExtResource("15_charge")
+
+[node name="heal" type="Node" parent="StateMachine"]
+script = ExtResource("16_heal")
+
+[node name="parry" type="Node" parent="StateMachine"]
+script = ExtResource("17_parry")
+
+[node name="staggered" type="Node" parent="StateMachine"]
+script = ExtResource("18_stag")
+
+[node name="dead" type="Node" parent="StateMachine"]
+script = ExtResource("19_dead")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -30)
+script = ExtResource("8_camera")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+position = Vector2(0, -30)
+texture = SubResource("Tex_light")
+energy = 0.6
+color = Color(0.624, 0.694, 0.769, 1)

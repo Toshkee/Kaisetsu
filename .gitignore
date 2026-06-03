@@ -1,0 +1,79 @@
+# ============================================================
+#  KAISETSU — .gitignore (Godot 4.6 project)
+# ============================================================
+
+# --- Godot 4+ import cache & editor-generated folder ---
+# Everything Godot regenerates on import lives here. Never commit it.
+.godot/
+
+# Legacy Godot 3 import cache (harmless to keep ignored)
+.import/
+*.import        # per-asset import metadata is regenerated; keep repo lean
+export.cfg
+export_presets.cfg   # contains machine-specific paths / can hold secrets
+
+# --- Exported builds / binaries ---
+build/
+builds/
+dist/
+exports/
+/android/
+/ios/
+*.exe
+*.pck
+*.zip
+*.dmg
+*.app/
+*.x86_64
+*.aab
+*.apk
+
+# --- Mono / C# (only if we ever add C#) ---
+.mono/
+data_*/
+mono_crash.*.json
+
+# --- Secrets & local-only config ---
+*.env
+.env
+.env.*
+secrets.cfg
+*.secret
+
+# --- OS junk ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# --- Editor / IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.cache/
+
+# --- Logs & temp ---
+*.log
+logs/
+*.tmp
+*.bak
+*.orig
+
+# --- Pixel-art tool working files (keep source .aseprite, ignore autosaves) ---
+*.aseprite~
+*.ase~
+
+# ============================================================
+#  NOTE: we DO commit source — scripts (src/), scenes (.tscn),
+#  resources (.tres), project.godot, docs/, and final art under
+#  assets/. The *.import rule above is the standard Godot
+#  recommendation; Godot regenerates them. If a collaborator's
+#  import settings ever need to be shared, un-ignore the specific
+#  *.import file.
+# ============================================================

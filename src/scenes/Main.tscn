@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cs3h3jxojsghe"]
+
+[ext_resource type="Script" uid="uid://cbn3p23jx0qpl" path="res://src/scenes/main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://src/scenes/MezameShore.tscn" id="2_room"]
+[ext_resource type="PackedScene" path="res://src/ui/HUD.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://src/ui/SettingsMenu.tscn" id="4_menu"]
+
+[node name="Main" type="Node2D" unique_id=274325671]
+script = ExtResource("1_main")
+
+[node name="World" type="Node2D" parent="." unique_id=290281158]
+
+[node name="MezameShore" parent="World" unique_id=1820279665 instance=ExtResource("2_room")]
+position = Vector2(764, -210)
+
+[node name="HUD" parent="." unique_id=1328283803 instance=ExtResource("3_hud")]
+
+[node name="MenuLayer" type="CanvasLayer" parent="." unique_id=1251530169]
+layer = 20
+
+[node name="SettingsMenu" parent="MenuLayer" unique_id=535602038 instance=ExtResource("4_menu")]
