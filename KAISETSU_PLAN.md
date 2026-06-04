@@ -40,6 +40,14 @@ The **signature mechanic** is the **weapon-as-consumable economy**. Verbatim Ste
 - **AVOID:** Single-weapon hoarding frustration — keep at least primary + sidearm.
 - **BUILD OURSELVES (not in Moonshire):** stamina bar, **parry + riposte**, Echoes-on-death. Reference Dark Souls / Hollow Knight / Salt and Sanctuary for these.
 
+> **⚙️ Combat-direction update — 2026-06-04 (supersedes the stamina-cost-on-roll decision in the COPY bullet above):**
+> The build has pivoted to a **movement-first, _Isadora's Edge_-style dodge** — a *free* dash with i-frames for its
+> whole duration, gated by a short cooldown, **NOT** stamina. Stamina is currently **de-emphasized**: attacks don't
+> spend it and the HUD bar is hidden (the `Stamina` component remains in code for possible future use). Attack
+> commitment (tap = light / hold = charge, no free cancel) and parry + riposte are unchanged in intent. So "add a
+> stamina cost on top … converts the free roll into deliberate stamina combat" is **no longer the direction** — the
+> free dash _is_ the dodge. (Parry is built but not yet wired into the input transitions; see backlog.)
+
 ---
 
 ## A2 — World & level design *(deepest section — what the dev loves most)*

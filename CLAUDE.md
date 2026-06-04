@@ -1,3 +1,121 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+> This file has two halves. **This top half is the engineering/architecture brief.** The **second half
+> (“Game Content & Zone Guide”)** is the canonical *design* bible — zones, bosses, characters, story. When a
+> request is about *how the code works*, read this half + `docs/CONVENTIONS.md`; when it’s about *what the game
+> is*, read the design bible below.
+
+## What this is / toolchain
+
+A **2D pixel-art soulslike built in Godot 4.6** (GDScript 2.0, **GL Compatibility** renderer). There is **no build
+step, no package manager, no test suite, and no CI** — it’s an editor-driven Godot project. “Running” = launching the
+Godot editor or the project binary. Verification is **manual play** (use the `run` / `verify` skills, or launch and
+play); there are no automated tests to run.
+
+The Godot 4.6 editor on this machine lives at `C:\Users\tosii\OneDrive\Desktop\Godot.exe`. Commands below use the
+PowerShell call operator; substitute `godot` if it’s on PATH.
+
+```powershell
+# Open the project in the editor
+& "C:\Users\tosii\OneDrive\Desktop\Godot.exe" --path . -e
+
+# Run the game (boots run/main_scene = src/ui/TitleScreen.tscn)
+& "C:\Users\tosii\OneDrive\Desktop\Godot.exe" --path .
+
+# Run ONE scene directly (autoloads still load, so most scenes work in isolation)
+& "C:\Users\tosii\OneDrive\Desktop\Godot.exe" --path . res://src/scenes/MezameShore.tscn
+
+# Syntax-check a single script without opening the editor
+& "C:\Users\tosii\OneDrive\Desktop\Godot.exe" --headless --path . --check-only --script res://src/player/player.gd
+
+# Capture a PNG of a scene (renders ~95 frames then saves). Must run NON-headless (needs the renderer).
+$env:SHOT_SCENE="res://src/scenes/MezameShore.tscn"; $env:SHOT_OUT="res://_preview.png"
+& "C:\Users\tosii\OneDrive\Desktop\Godot.exe" --path . --script res://tools/screenshot.gd
+```
+
+> `tools/screenshot.gd`’s built-in default `SHOT_SCENE` is `res://src/scenes/Game.tscn`, which **does not exist** —
+> always pass `SHOT_SCENE` explicitly (e.g. `MezameShore.tscn` or `Main.tscn`).
+
+## Canonical docs (read these before changing systems)
+
+- **`docs/CONVENTIONS.md`** — the **locked integration contract**: exact autoload names + APIs, input action names,
+  the collision-layer bit assignments, the Hitbox/Hurtbox protocol, component APIs, the Player interface, and the
+  exported tuning constants. New scripts/scenes **must** conform to it. This is the highest-authority engineering doc.
+- **`docs/STYLE_GUIDE.md`** — palette (cold/desaturated), resolution, lighting/mood rules.
+- **`KAISETSU_PLAN.md`** — research & locked decisions (Moonshire + Isadora’s-Edge inspiration, the intended art
+  pipeline, open design questions). Contains dated decision notes when direction changes.
+- **`docs/PARALLAX_AND_TILESET_GUIDE.md`** — how PixelLab tilesets/parallax strips get wired into Godot
+  (TileMapLayer + Parallax2D), with the pixel-art import settings.
+
+## Architecture (the big picture — requires several files to see)
+
+**Three layers stacked: global autoloads → reusable components → actors that compose them.**
+
+1. **Autoload backbone** (`src/autoload/`, registered in `project.godot`, reachable by name everywhere):
+   `Settings` (assist sliders + audio bus volumes → `user://settings.cfg`), `GameState` (all run-scoped state: echoes,
+   flags, lit shrines, respawn anchor, and the death/Echoes loop), `MusicManager` (null-safe — pass `""` to fade,
+   missing files are no-ops, **don’t guard around it**), `SaveManager` (`user://save.json`), and `GameFlow` (the
+   **single owner of scene changes** — every swap goes through it behind a persistent fade `Transition` + a `_busy`
+   guard). Treat these as the only globals; everything else is scene-local.
+
+2. **Component system** (`src/components/`, `class_name`’d nodes attached as children): `Health`, `Stamina`, `Focus`
+   are signal-emitting resource pools (HUD binds their `*_changed` signals). The crucial pattern is the
+   **Hitbox/Hurtbox combat seam**:
+   - `Hitbox` (Area2D) is a *passive* damage volume — **it is detected, it never detects**. Its `active` flag toggles
+     its shapes on only during attack frames; it carries `damage/knockback/parryable/attack_id`.
+   - `Hurtbox` (Area2D) monitors for overlapping hitboxes and emits **`hurt(hitbox)`** to its owner. It does **not**
+     apply damage.
+   - **The owner decides what happens.** This is the key seam: the **Player routes `hurt` to its current *state*** (so
+     i-frames, parry, and stagger fairness all live in the relevant state file), while the **Enemy base** applies
+     damage/knockback directly. So “what happens when X gets hit” is always auditable in one place per actor.
+   - Layers/masks are assigned **by bit** per CONVENTIONS §4 (e.g. player body `collision_mask = 517` = world+enemy+
+     one_way). The 10 named layers are in `project.godot [layer_names]`.
+
+3. **Player** (`src/player/`): a `CharacterBody2D` in group **`"player"`** (find via
+   `get_tree().get_first_node_in_group("player")`) driving a **hierarchical state machine** — a `StateMachine` node
+   delegates each physics frame to one of 11 `PlayerState` children in `states/` (idle/run/jump/fall/dodge/attack/
+   charge/parry/heal/staggered/dead). `player.gd` owns tuning constants, movement helpers, input buffering, facing,
+   and the combat seam. **Combat is movement-first** (the dodge is a *free* Isadora-style dash with full-duration
+   i-frames, gated by cooldown — **not** stamina; stamina is currently de-emphasized — see the CONVENTIONS §7/§9
+   note). **Charge = HOLD `attack`** (`charge.gd` is a hold-detector that releases into a light or commits a heavy).
+
+4. **Enemies** (`src/enemies/`): an `enemy.gd` base (routes `hurt`→`Health`, knockback, hit-flash, death + Echo
+   reward, and gates attacks off-screen via `VisibleOnScreenNotifier2D`) plus concrete enemies (Drift Husk, Tide
+   Crawler), each a 5-state FSM (PATROL/CHASE/WINDUP/ATTACK/RECOVER) with red color-pop telegraphs. No bosses exist
+   yet (`src/bosses/` is planned). Note: there is **no poise/interrupt system** and **`lock_on` is bound but unread**.
+
+5. **The progression loop + the integrator split** (`src/world/` + `src/scenes/`): the soulslike loop is
+   **Shrine rest → save + set respawn → full heal**, and **death → drop Echoes at the corpse → respawn at last lit
+   shrine → reclaim via `EchoMarker`**. Critically, this loop is **wired by the integrator `src/scenes/Main.tscn` +
+   `main.gd`**, which instances a *room scene* + the HUD + the pause/SettingsMenu and owns the death→respawn→marker
+   cycle. A **room scene** (e.g. `MezameShore.tscn`) is just geometry + a `Shrine` + enemies + a `player_spawn`
+   `Marker2D`; it is **not** self-sufficient. So: gameplay systems live in Main/autoloads; rooms are content.
+
+6. **Scene flow:** `TitleScreen.tscn` → `GameFlow.start_new_game/continue_game` → `Main.tscn` → instances a room. The
+   HUD re-binds to the (respawned) player’s component signals each time.
+
+### Gotchas that will bite
+
+- **Rooms are hand-authored scenes (no flat-image map anymore).** A *room* is a scene like **`MezameShore.tscn`** —
+  geometry + a `Shrine` + enemies + a `player_spawn` `Marker2D` — reached via TitleScreen→`Main.tscn`. An earlier
+  throwaway `Map.tscn`/`map.gd` that baked collision from a hardcoded `RUNS` array over a flat PixelLab image was
+  **deleted on 2026-06-04** (`assets/maps/` is now empty). The path forward: author terrain with `TileMapLayer` +
+  `TileSet` and depth with `Parallax2D` — see `docs/PARALLAX_AND_TILESET_GUIDE.md`.
+- **Pixel-art rendering is already configured globally** — 640×360 viewport, integer stretch, GL Compatibility,
+  `default_texture_filter=0` (Nearest), and 2D snap on. Leave per-node **Texture Filter = Inherit** — a per-node
+  `texture_filter=1`/Linear override re-blurs pixel art, so don’t add one.
+
+### House style (from CONVENTIONS.md)
+
+GDScript 2.0 / Godot 4.6. **Indent with TABS.** One `class_name` per file. Files `snake_case.gd`, scenes
+`PascalCase.tscn`. Static typing where cheap. Signals over polling; `@onready` for child refs; **never hard-code
+absolute cross-scene node paths**. Placeholder visuals use `ColorRect`/`Polygon2D`/`_draw()` with the STYLE_GUIDE
+palette (most enemies are still placeholders; Sōji has real PixelLab `AnimatedSprite2D` frames).
+
+---
+
 # KAISETSU — Game Content & Zone Guide
 
 > **For Claude Code:** This file defines the game's structure, zone progression, enemies, bosses, and characters. Reference this at the start of each session. Goal: a 2D soulslike that feels like **MOONSHIRE** — atmospheric, melancholic, sectioned zones that flow into one another, deliberate combat, and a sense of lonely discovery.

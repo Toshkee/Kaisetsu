@@ -76,8 +76,8 @@ Set layers/masks by BIT NUMBER (layer 1 = value 1, layer 4 = value 8 ...). Helpe
 - Exposes `facing: int` (+1 right / -1 left), `is_dead() -> bool`, `is_invulnerable() -> bool`,
   signals: `died`, `stats_changed`. HUD binds to player's component signals.
 - State machine: child `StateMachine` node + `states/` children. States: `idle run jump fall dodge attack charge heal
-  parry staggered dead`. Strict gating; **death + pause hard-cancel everything**. Dodge has an i-frame window
-  (~0.3s inside a longer roll) and a stamina cost. Attacks commit (no free cancel). Heal = long, movement-locked,
+  parry staggered dead`. Strict gating; **death + pause hard-cancel everything**. Dodge is a free **Isadora-style dash**: i-frames for its WHOLE
+  duration, gated by a short cooldown (`dodge_cooldown`), NOT stamina. Attacks commit (no free cancel). Heal = long, movement-locked,
   interruptible, no i-frames, spends 1 Focus. Parry = short bright-flash window; success → riposte + refund stamina.
 
 ## 8. Scene/runtime conventions
@@ -94,3 +94,8 @@ Player: speed 110, accel 900, friction 1100, jump_velocity -300, gravity 980, do
 dodge_iframe_start 0.05, dodge_iframe_end 0.32, dodge_stamina 25, light_attack_stamina 12, light_attack_damage 18,
 charge_time 0.45, charge_damage 40, charge_stamina 22, parry_window 0.16, heal_amount 45, heal_time 0.9, max_health 100,
 max_stamina 100, max_focus 3. DriftHusk: speed 35, health 40, contact/swing damage 12, windup 0.55, active 0.18, recovery 0.7.
+
+> **Combat-direction note (movement-first pivot, 2026-06-04):** `dodge_stamina` is **not** charged — the dodge is a free
+> Isadora-style dash gated by `dodge_cooldown`. `light_attack_stamina` / `charge_stamina` are **not currently spent** either
+> (stamina de-emphasized; the HUD stamina bar is hidden). The `Stamina` component stays in code for possible future use.
+> See the A1 combat-direction update in `KAISETSU_PLAN.md`.
